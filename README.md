@@ -11,7 +11,6 @@
 - T-Pot Honeypot
 - Threat Visualization
 
-[GitHub Repository](https://github.com/Charlemagne-ai/aws-tpot-honeypot)
 
 ## Project Overview
 
