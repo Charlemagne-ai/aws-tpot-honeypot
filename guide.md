@@ -271,7 +271,17 @@ https://<AWS-Public-IPv4>:64297
 ---
 
 ## 8. Daily Reboot & Cron Job
-By default, T-Pot sets up a **daily reboot** around 2:42 AM:
+By default, T-Pot sets up a **daily reboot** around 2:42 AM (system’s local time) via `crontab`.
+
+This is to ensure:
+
+- Containers restart cleanly.
+    
+- Docker images can be pruned.
+    
+- Reduces risk of memory leaks or disk issues from long runs.
+
+You can customize or remove this in the root crontab:
 
 ```bash
 sudo crontab -e
@@ -279,6 +289,7 @@ sudo crontab -e
 # T-Pot daily reboot
 42 2 * * * bash -c 'systemctl stop tpot.service && docker container prune -f; docker image prune -f; docker volume prune -f; /usr/sbin/shutdown -r +1 "T-Pot Daily Reboot"'
 ```
+
 If you want uninterrupted operation, remove/comment out that line.
 
 ---
