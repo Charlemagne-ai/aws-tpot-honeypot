@@ -54,6 +54,8 @@ Key highlights from T-Pot 24.04.1:
 
 ## 2. AWS Prerequisites and Considerations
 
+- **Basic AWS, EC2, SSH, and Linux Commands**: You should be familiar with launching EC2 instances, connecting via SSH, and basic Linux command usage.
+
 1. **AWS Account**: Must have permissions to launch/manage EC2, allocate Elastic IPs, manage Security Groups, etc.
 2. **Instance Requirements**:
    - At minimum, an **8GB RAM** instance for a “sensor” type T-Pot.
@@ -88,7 +90,8 @@ T-Pot supports multiple distributions, but **Ubuntu 22.04 LTS** is a straightfor
    - For a minimal sensor: `t3.large` (8GB).  
    - For a heavier deployment/hive: `t3.xlarge` (16GB) or higher.
 3. **Key pair**:  
-   - Select an existing or create a new key pair.  
+   - Use a **`.pem`** file for OpenSSH or a **`.ppk`** file for PuTTY.  
+   - Select an existing key pair or create a new key pair. 
    - Used for SSH into your EC2 instance.
 4. **Configure Network**:  
    - Use a public subnet for direct internet access.  
@@ -114,7 +117,8 @@ _Figure 2: Example EC2 Setup (cont.)_
 ## 4. Preparing the System (Post-Launch Setup)
 
 1. **SSH to the Instance**:  
-   Navigate to the directory with your `.pem` key.
+   Navigate to the directory with your `.pem` or `.ppk` (converted if using PuTTY). For OpenSSH:
+   
    ```bash
    chmod 400 your-key.pem
    ssh -i /path/to/key.pem ubuntu@<Public-DNS>
@@ -128,15 +132,15 @@ _Figure 2: Example EC2 Setup (cont.)_
    ![Pasted image 20250325174056](https://github.com/user-attachments/assets/0a7aaac0-0704-42b0-bd80-4c1401e2f4b1)
 
 
-2. **Update & Upgrade**:
+3. **Update & Upgrade**:
    ```bash
    sudo apt-get update && sudo apt-get upgrade -y
    ```
-3. **Install `curl`** (if missing):
+4. **Install `curl`** (if missing):
    ```bash
    sudo apt-get install -y curl
    ```
-4. **(Optional) Additional Utilities**:
+5. **(Optional) Additional Utilities**:
    ```bash
    sudo apt-get install -y git wget net-tools
    ```
