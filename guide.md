@@ -392,14 +392,14 @@ If you run out of space for logs, you can attach a second EBS volume. Many prefe
 
 1. **Create a Partition** (optional, but recommended)
    ```bash
-   sudo parted /dev/nvme1n1 -- mklabel gpt
-   sudo parted /dev/nvme1n1 -- mkpart primary ext4 0% 100%
+   sudo parted /dev/nvme0n1 -- mklabel gpt
+   sudo parted /dev/nvme0n1 -- mkpart primary ext4 0% 100%
    ```
-   Afterward, you may have `/dev/nvme1n1p1`.
+   Afterward, you may have `/dev/nvme0n1p1`.
 
 2. **Format** (ext4):
    ```bash
-   sudo mkfs.ext4 /dev/nvme1n1p1
+   sudo mkfs.ext4 /dev/nvme0n1p1
    ```
    (Adjust if parted labeled it differently.)
 
@@ -408,7 +408,7 @@ If you run out of space for logs, you can attach a second EBS volume. Many prefe
 ### 14.2 Create a Mount Point and Mount It
 ```bash
 sudo mkdir /data
-sudo mount /dev/nvme1n1p1 /data
+sudo mount /dev/nvme0n1p1 /data
 df -h
 ```
 You should see `/data` with the new capacity (e.g., 256GB).
@@ -418,7 +418,7 @@ You should see `/data` with the new capacity (e.g., 256GB).
 ### 14.3 Add an Entry to `/etc/fstab`
 So it auto-mounts on reboot:
 ```bash
-echo "/dev/nvme1n1p1 /data ext4 defaults 0 0" | sudo tee -a /etc/fstab
+echo "/dev/nvme0n1p1 /data ext4 defaults 0 2" | sudo tee -a /etc/fstab
 ```
 
 ---
