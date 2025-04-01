@@ -58,8 +58,6 @@ This project aims to:
 
 ---
 
-# Intelligence Report: AWS Honeypot Data Analysis
-
 ## 1. Introduction
 
 I deployed a **T-Pot 24.04.1 honeypot** environment on AWS from **March 25 to April 1, 2025**. The objective was to capture real-world malicious traffic, analyze threat patterns (ports, countries, exploit attempts), and produce actionable insights for security stakeholders. Over the course of seven days, the honeypot logged more than **528,000 attacks** targeting multiple honeypot services, with Suricata providing in-depth alert data for critical vulnerabilities (Log4Shell, ActiveMQ RCE, Mozi IoT exploits, etc.).
