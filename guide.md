@@ -6,30 +6,31 @@
 ## Table of Contents
 1. [Overview of T-Pot 24.04.1](#1-overview-of-t-pot-24041)
 2. [AWS Prerequisites and Considerations](#2-aws-prerequisites-and-considerations)
-3. [Launching an EC2 Instance (Ubuntu 22.04)](#3-launching-an-ec2-instance-ubuntu-2204)
-4. [Preparing the System (Post-Launch Setup)](#4-preparing-the-system-post-launch-setup)
-5. [Installing T-Pot 24.04.1](#5-installing-t-pot-24041)  
-   5.1 [System Requirements Check](#51-system-requirements-check)  
-   5.2 [One-line Installer (Recommended)](#52-one-line-installer-recommended)  
-   5.3 [Reboot](#53-reboot)
-6. [AWS Security Group Configuration](#6-aws-security-group-configuration)
-7. [Post-Install Verification & Basic Usage](#7-post-install-verification--basic-usage)  
-   7.1 [SSH on New Port](#71-ssh-on-new-port)  
-   7.2 [Check T-Pot Service and Running Containers](#72-check-t-pot-service-and-running-containers)  
-   7.3 [T-Pot Landing Page](#73-t-pot-landing-page)  
-   7.4 [Kibana (Main Log Analysis Interface)](#74-kibana-main-log-analysis-interface)
-8. [Daily Reboot & Cron Job](#8-daily-reboot--cron-job)
-9. [Gathering and Managing Logs](#9-gathering-and-managing-logs)
-10. [Enhancing Security](#10-enhancing-security)
-11. [Disabling Community Data Submission (Optional)](#11-disabling-community-data-submission-optional)
-12. [Day to Day Operation & Teardown](#12-day-to-day-operation--teardown)
-13. [Quick Reference & Troubleshooting](#13-quick-reference--troubleshooting)
-14. [Add Second Storage Volume (Optional)](#14-add-second-storage-volume-optional)  
-   14.1 [Format Your Drive](#141-format-your-drive)  
-   14.2 [Create a Mount Point and Mount It](#142-create-a-mount-point-and-mount-it)  
-   14.3 [Add an Entry to /etc/fstab](#143-add-an-entry-to-etcfstab)  
-   14.4 [Move T-Pot Logs to the New Drive](#144-move-t-pot-logs-to-the-new-drive)
-15. [Final Thoughts & Further Enhancements](#final-thoughts--further-enhancements)
+3. [Total Cost](#3-total-cost)
+4. [Launching an EC2 Instance (Ubuntu 22.04)](#4-launching-an-ec2-instance-ubuntu-2204)
+5. [Preparing the System (Post-Launch Setup)](#5-preparing-the-system-post-launch-setup)
+6. [Installing T-Pot 24.04.1](#6-installing-t-pot-24041)  
+   5.1 [System Requirements Check](#61-system-requirements-check)  
+   5.2 [One-line Installer (Recommended)](#62-one-line-installer-recommended)  
+   5.3 [Reboot](#63-reboot)
+7. [AWS Security Group Configuration](#7-aws-security-group-configuration)
+8. [Post-Install Verification & Basic Usage](#8-post-install-verification--basic-usage)  
+   7.1 [SSH on New Port](#81-ssh-on-new-port)  
+   7.2 [Check T-Pot Service and Running Containers](#82-check-t-pot-service-and-running-containers)  
+   7.3 [T-Pot Landing Page](#83-t-pot-landing-page)  
+   7.4 [Kibana (Main Log Analysis Interface)](#84-kibana-main-log-analysis-interface)
+9. [Daily Reboot & Cron Job](#9-daily-reboot--cron-job)
+10. [Gathering and Managing Logs](#10-gathering-and-managing-logs)
+11. [Enhancing Security](#11-enhancing-security)
+12. [Disabling Community Data Submission (Optional)](#12-disabling-community-data-submission-optional)
+13. [Day to Day Operation & Teardown](#13-day-to-day-operation--teardown)
+14. [Quick Reference & Troubleshooting](#14-quick-reference--troubleshooting)
+15. [Add Second Storage Volume (Optional)](#15-add-second-storage-volume-optional)  
+   14.1 [Format Your Drive](#151-format-your-drive)  
+   14.2 [Create a Mount Point and Mount It](#152-create-a-mount-point-and-mount-it)  
+   14.3 [Add an Entry to /etc/fstab](#153-add-an-entry-to-etcfstab)  
+   14.4 [Move T-Pot Logs to the New Drive](#154-move-t-pot-logs-to-the-new-drive)
+16. [Final Thoughts & Further Enhancements](#16-final-thoughts--further-enhancements)
 
 ---
 
@@ -79,7 +80,14 @@ Key highlights from T-Pot 24.04.1:
 
 ---
 
-## 3. Launching an EC2 Instance (Ubuntu 22.04)
+## 3. Total Cost
+
+![Screenshot 2025-04-01 at 1 51 26 PM](https://github.com/user-attachments/assets/3ff0337c-ef43-4912-a12e-d78356239cde)
+*Figure 1 - Total cost breakdown for 7 day period*
+
+---
+
+## 4. Launching an EC2 Instance (Ubuntu 22.04)
 
 T-Pot supports multiple distributions, but **Ubuntu 22.04 LTS** is a straightforward choice in AWS.
 
@@ -102,7 +110,7 @@ T-Pot supports multiple distributions, but **Ubuntu 22.04 LTS** is a straightfor
    - In this example: 16GB (root volume) for OS + 256GB (EBS volume) for logs.
 6. **Security Group**:
    - Inbound rule for SSH (port 22) to your IP for now.  
-   - We’ll configure T-Pot’s ports (64295, 64297, etc.) in [Section 6](#6-aws-security-group-configuration).
+   - We’ll configure T-Pot’s ports (64295, 64297, etc.) in [Section 7](#7-aws-security-group-configuration).
 7. **Elastic IP** (Optional):
    - Allocate & attach an Elastic IP to keep a stable IP if you stop your instance.
 
@@ -114,7 +122,7 @@ _Figure 2: Example EC2 Setup (cont.)_
 
 ---
 
-## 4. Preparing the System (Post-Launch Setup)
+## 5. Preparing the System (Post-Launch Setup)
 
 1. **SSH to the Instance**:  
    Navigate to the directory with your `.pem` or `.ppk` (converted if using PuTTY). For OpenSSH:
@@ -147,14 +155,14 @@ _Figure 2: Example EC2 Setup (cont.)_
 
 ---
 
-## 5. Installing T-Pot 24.04.1
+## 6. Installing T-Pot 24.04.1
 
-### 5.1 System Requirements Check
+### 6.1 System Requirements Check
 - Confirm at least **8GB RAM** & **128GB** disk.
 - Ensure non-filtered, outgoing internet (no proxies).
 - T-Pot uses many honeypot ports—ensure your Security Group won’t block if you want real attacks.
 
-### 5.2 One-line Installer (Recommended)
+### 6.2 One-line Installer (Recommended)
 The newest T-Pot release includes a simplified installation script. Run it as a non-root user in `$HOME`:
 
 ```bash
@@ -181,7 +189,7 @@ env bash -c "$(curl -sL https://github.com/telekom-security/tpotce/raw/master/in
 
 > **TIP**: Watch for port conflict messages if you have custom services.
 
-### 5.3 Reboot
+### 6.3 Reboot
 Once finished, reboot:
 
 ```bash
@@ -192,7 +200,7 @@ When the instance is back, T-Pot is running. SSH now uses port **64295** by defa
 
 ---
 
-## 6. AWS Security Group Configuration
+## 7. AWS Security Group Configuration
 
 T-Pot uses a wide range of ports. At minimum:
 
@@ -214,9 +222,9 @@ T-Pot uses a wide range of ports. At minimum:
 
 ---
 
-## 7. Post-Install Verification & Basic Usage
+## 8. Post-Install Verification & Basic Usage
 
-### 7.1 SSH on New Port
+### 8.1 SSH on New Port
 After the T-Pot reboot, SSH on port 64295:
 
 ```bash
@@ -228,7 +236,7 @@ ssh -p 64295 -i your-key.pem ubuntu@ec2-xx-xxx-xxx-xxx.us-east-2.compute.amazona
 ```
 - Username: `ubuntu` (or your OS user).
 
-### 7.2 Check T-Pot Service and Running Containers
+### 8.2 Check T-Pot Service and Running Containers
 ```bash
 systemctl status tpot
 dps
@@ -239,7 +247,7 @@ dps
 - Should see multiple containers (Cowrie, Dionaea, Kibana, etc.).
 - Status should indicate “Up.”
 
-### 7.3 T-Pot Landing Page
+### 8.3 T-Pot Landing Page
 Open your browser:
 ```
 https://<AWS-Public-IPv4>:64297
@@ -261,7 +269,7 @@ https://<AWS-Public-IPv4>:64297
 ![Pasted image 20250325182938](https://github.com/user-attachments/assets/d17a7cca-a954-44a6-b3bd-1d922674d983)
 
 
-### 7.4 Kibana (Main Log Analysis Interface)
+### 8.4 Kibana (Main Log Analysis Interface)
 - Click **Kibana** in the T-Pot Landing Page, or:
   ```
   https://<AWS-Public-IPv4>:64297/kibana
@@ -274,7 +282,7 @@ https://<AWS-Public-IPv4>:64297
 
 ---
 
-## 8. Daily Reboot & Cron Job
+## 9. Daily Reboot & Cron Job
 By default, T-Pot sets up a **daily reboot** around 2:42 AM (system’s local time) via `crontab`.
 
 This is to ensure:
@@ -298,7 +306,7 @@ If you want uninterrupted operation, remove/comment out that line.
 
 ---
 
-## 9. Gathering and Managing Logs
+## 10. Gathering and Managing Logs
 
 1. **Kibana**:
    - Real-time visualization (top attackers, geolocation, etc.).
@@ -316,7 +324,7 @@ If you want uninterrupted operation, remove/comment out that line.
 
 ---
 
-## 10. Enhancing Security
+## 11. Enhancing Security
 
 1. **Restrict Management**:
    - Restrict Kibana (`64297`) and SSH (`64295`) to your IP.
@@ -328,7 +336,7 @@ If you want uninterrupted operation, remove/comment out that line.
 
 ---
 
-## 11. Disabling Community Data Submission (Optional)
+## 12. Disabling Community Data Submission (Optional)
 
 T-Pot sends anonymized data to **Sicherheitstacho** by default. To opt out:
 
@@ -339,7 +347,7 @@ T-Pot sends anonymized data to **Sicherheitstacho** by default. To opt out:
 
 ---
 
-## 12. Day to Day Operation & Teardown
+## 13. Day to Day Operation & Teardown
 
 1. **Operation**:
    - Check Kibana daily.
@@ -354,7 +362,7 @@ T-Pot sends anonymized data to **Sicherheitstacho** by default. To opt out:
 
 ---
 
-## 13. Quick Reference & Troubleshooting
+## 14. Quick Reference & Troubleshooting
 
 1. **Check Container Health**:
    ```bash
@@ -384,11 +392,11 @@ T-Pot sends anonymized data to **Sicherheitstacho** by default. To opt out:
 
 ---
 
-## 14. Add Second Storage Volume (Optional)
+## 15. Add Second Storage Volume (Optional)
 
 If you run out of space for logs, you can attach a second EBS volume. Many prefer having a separate volume from the OS to keep logs and utilize gp3 for cost savings. Create the volume in AWS, attach it, then follow these steps.
 
-### 14.1 Format Your Drive
+### 15.1 Format Your Drive
 
 1. **Create a Partition** (optional, but recommended)
    ```bash
@@ -405,7 +413,7 @@ If you run out of space for logs, you can attach a second EBS volume. Many prefe
 
 ---
 
-### 14.2 Create a Mount Point and Mount It
+### 15.2 Create a Mount Point and Mount It
 ```bash
 sudo mkdir /data
 sudo mount /dev/nvme0n1p1 /data
@@ -415,7 +423,7 @@ You should see `/data` with the new capacity (e.g., 256GB).
 
 ---
 
-### 14.3 Add an Entry to `/etc/fstab`
+### 15.3 Add an Entry to `/etc/fstab`
 So it auto-mounts on reboot:
 ```bash
 echo "/dev/nvme0n1p1 /data ext4 defaults 0 2" | sudo tee -a /etc/fstab
@@ -423,7 +431,7 @@ echo "/dev/nvme0n1p1 /data ext4 defaults 0 2" | sudo tee -a /etc/fstab
 
 ---
 
-### 14.4 Move T-Pot Logs to the New Drive
+### 15.4 Move T-Pot Logs to the New Drive
 T-Pot stores data in `~/tpotce/data`. Let’s relocate:
 
 1. **Stop T-Pot**:
@@ -451,7 +459,7 @@ T-Pot stores data in `~/tpotce/data`. Let’s relocate:
 
 ---
 
-## Final Thoughts & Further Enhancements
+## 16. Final Thoughts & Further Enhancements
 
 With T-Pot 24.04.1 on AWS:
 
