@@ -156,6 +156,11 @@ Honeytrap alone accounts for ~57% of total hits, capturing broad unknown-port sc
 - **Russia**, **China**, **Nigeria** also prevalent  
 - ~54k from **known attacker** IP addresses, 3k from anonymizers, ~2.6k mass scanners
 
+![attack-map](https://github.com/user-attachments/assets/b7e1fa0c-358e-4c6a-babf-57e746917e39)
+
+▶️ [Attack Map - Real Time](https://vimeo.com/1070981816/24bc47cea7)
+
+
 ![image](https://github.com/user-attachments/assets/c14b454a-b80e-447a-a126-b55efd31bc96)
 
 *Figure 4 - Attacks by Country*
